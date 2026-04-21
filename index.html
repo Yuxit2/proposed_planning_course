@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Urban Planning Research: Analysis, Equity, and Policy</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAFAF8;
+    --surface: #FFFFFF;
+    --text: #1a1a1a;
+    --text-secondary: #555;
+    --accent: #2D5A3D;
+    --accent-light: #E8F0EB;
+    --accent-hover: #1E3D29;
+    --border: #E2E0DC;
+    --border-light: #EEECE8;
+    --warm-gray: #F5F3EF;
+    --tag-reading: #D4E4DA;
+    --tag-assignment: #F9E4CC;
+    --tag-lab: #D6E4F0;
+    --tag-discussion: #E8D8F0;
+    --tag-project: #F0D4D4;
+    --sidebar-w: 280px;
+    --header-h: 60px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: var(--header-h);
+    background: var(--accent);
+    color: white;
+    display: flex; align-items: center;
+    padding: 0 2rem;
+    z-index: 100;
+    box-shadow: 0 1px 4px rgba(0,0,0,.12);
+  }
+  .site-header h1 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: .01em;
+  }
+  .site-header .subtitle {
+    font-size: .78rem;
+    opacity: .75;
+    margin-left: 1.2rem;
+    font-weight: 400;
+  }
+  .hamburger {
+    display: none;
+    background: none; border: none; color: white;
+    font-size: 1.5rem; cursor: pointer; margin-right: 1rem;
+    line-height: 1;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: fixed;
+    top: var(--header-h); left: 0;
+    width: var(--sidebar-w);
+    height: calc(100vh - var(--header-h));
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 1.5rem 0;
+    z-index: 90;
+    transition: transform .3s ease;
+  }
+  .sidebar-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.35);
+    z-index: 85;
+  }
+  .sidebar nav a {
+    display: block;
+    padding: .45rem 1.5rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: .85rem;
+    font-weight: 500;
+    transition: all .15s;
+    border-left: 3px solid transparent;
+  }
+  .sidebar nav a:hover,
+  .sidebar nav a.active {
+    color: var(--accent);
+    background: var(--accent-light);
+    border-left-color: var(--accent);
+  }
+  .sidebar .nav-group-label {
+    padding: .6rem 1.5rem .25rem;
+    font-size: .7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: #999;
+  }
+  .sidebar .nav-divider {
+    height: 1px;
+    background: var(--border-light);
+    margin: .7rem 1.5rem;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    margin-left: var(--sidebar-w);
+    margin-top: var(--header-h);
+    padding: 2.5rem 3rem 4rem;
+  }
+
+  /* ── TYPOGRAPHY ── */
+  h2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 2.8rem 0 1rem;
+    padding-bottom: .4rem;
+    border-bottom: 2px solid var(--accent);
+  }
+  h2:first-of-type { margin-top: 0; }
+
+  h3 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 1.8rem 0 .6rem;
+  }
+  h4 {
+    font-size: .95rem;
+    font-weight: 600;
+    margin: 1rem 0 .4rem;
+  }
+  p { margin-bottom: .8rem; }
+  a { color: var(--accent); }
+  a:hover { color: var(--accent-hover); }
+
+  /* ── WELCOME BANNER ── */
+  .welcome {
+    background: linear-gradient(135deg, var(--accent) 0%, #3A7A52 100%);
+    color: white;
+    border-radius: 10px;
+    padding: 2rem 2.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .welcome::after {
+    content: '';
+    position: absolute; right: -40px; top: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.06);
+  }
+  .welcome h2 {
+    border: none; color: white; margin: 0 0 .4rem; font-size: 1.5rem;
+  }
+  .welcome p { opacity: .9; margin: 0; font-size: .95rem; line-height: 1.6; }
+
+  /* ── CARDS ── */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1.2rem 0;
+  }
+  .info-card {
+    background: var(--warm-gray);
+    border-radius: 8px;
+    padding: 1.2rem 1.4rem;
+  }
+  .info-card .label {
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: #999;
+    font-weight: 600;
+    margin-bottom: .25rem;
+  }
+  .info-card .value {
+    font-size: .95rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* ── TAGS ── */
+  .tag {
+    display: inline-block;
+    padding: .15rem .55rem;
+    border-radius: 4px;
+    font-size: .72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    vertical-align: middle;
+    margin-right: .3rem;
+  }
+  .tag-reading { background: var(--tag-reading); color: #1B4332; }
+  .tag-assignment { background: var(--tag-assignment); color: #7C4A1E; }
+  .tag-lab { background: var(--tag-lab); color: #1B3A5C; }
+  .tag-discussion { background: var(--tag-discussion); color: #4A2D6B; }
+  .tag-project { background: var(--tag-project); color: #6B2D2D; }
+  .tag-before { background: #FDE8E8; color: #8B2525; }
+
+  /* ── WEEK SECTION ── */
+  .week-section {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border-light);
+    padding: 1.6rem 0;
+    margin-bottom: 0;
+  }
+  .week-section:last-of-type { border-bottom: none; }
+  .week-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: .15rem;
+  }
+  .week-subtitle {
+    font-size: .95rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: .8rem;
+  }
+  .week-stage {
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #999;
+    font-weight: 600;
+    margin-bottom: .5rem;
+  }
+
+  /* collapsible topics — native details/summary */
+  details.topics-details {
+    margin-top: .8rem;
+  }
+  details.topics-details > summary {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    cursor: pointer;
+    background: var(--warm-gray);
+    border-radius: 6px;
+    padding: .5rem .8rem;
+    font-size: .82rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    list-style: none;
+    transition: background .15s;
+    user-select: none;
+  }
+  details.topics-details > summary::-webkit-details-marker { display: none; }
+  details.topics-details > summary::before {
+    content: '▶';
+    font-size: .65rem;
+    transition: transform .2s;
+    display: inline-block;
+  }
+  details.topics-details[open] > summary::before { transform: rotate(90deg); }
+  details.topics-details > summary:hover { background: var(--accent-light); color: var(--accent); }
+  details.topics-details[open] > summary { border-radius: 6px 6px 0 0; }
+  details.topics-details .topics-content {
+    background: var(--warm-gray);
+    border-radius: 0 0 6px 6px;
+    padding: .8rem 1rem;
+    font-size: .85rem;
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+  details.topics-details .topics-content ul {
+    list-style: none; padding-left: 0;
+  }
+  details.topics-details .topics-content ul li {
+    padding: .15rem 0 .15rem 1rem;
+    position: relative;
+  }
+  details.topics-details .topics-content ul li::before {
+    content: '›';
+    position: absolute; left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  details.topics-details .topics-content ul ul { margin-left: .6rem; }
+  details.topics-details .topics-content ul ul li::before { content: '–'; color: #bbb; }
+
+  /* reading / assignment blocks */
+  .block { margin-top: .7rem; }
+  .block-label {
+    font-size: .78rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: .25rem;
+    display: flex; align-items: center; gap: .4rem;
+  }
+  .block ul {
+    list-style: none; padding-left: .2rem;
+  }
+  .block ul li {
+    padding: .2rem 0;
+    font-size: .85rem;
+    line-height: 1.55;
+    padding-left: 1rem;
+    position: relative;
+  }
+  .block ul li::before {
+    content: '';
+    position: absolute; left: 0; top: .62rem;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: .4;
+  }
+  .block ul li a {
+    word-break: break-all;
+  }
+
+  .assignment-box {
+    background: #FFF9F0;
+    border-left: 3px solid #E8A84C;
+    border-radius: 0 6px 6px 0;
+    padding: .7rem 1rem;
+    margin-top: .7rem;
+    font-size: .85rem;
+  }
+  .assignment-box strong { color: #7C4A1E; }
+
+  .discussion-box {
+    background: #F5F0FA;
+    border-left: 3px solid #9B7DC4;
+    border-radius: 0 6px 6px 0;
+    padding: .7rem 1rem;
+    margin-top: .7rem;
+    font-size: .85rem;
+  }
+
+  .lab-box {
+    background: #EEF4FA;
+    border-left: 3px solid #5B8DB8;
+    border-radius: 0 6px 6px 0;
+    padding: .7rem 1rem;
+    margin-top: .7rem;
+    font-size: .85rem;
+  }
+
+  .before-class-box {
+    background: #FFF0F0;
+    border-left: 3px solid #D45555;
+    border-radius: 0 6px 6px 0;
+    padding: .7rem 1rem;
+    margin-top: .7rem;
+    font-size: .85rem;
+  }
+  .before-class-box strong { color: #8B2525; }
+
+  /* ── GRADING ── */
+  .grade-bar {
+    display: flex;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 32px;
+    margin: 1rem 0;
+    font-size: .72rem;
+    font-weight: 600;
+  }
+  .grade-bar > div {
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    white-space: nowrap;
+    padding: 0 .5rem;
+  }
+
+  .grade-scale {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: .4rem;
+    margin: 1rem 0;
+    font-size: .82rem;
+  }
+  .grade-scale div {
+    background: var(--warm-gray);
+    padding: .35rem .6rem;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .grade-scale .pts { color: var(--text-secondary); }
+
+  /* ── AI POLICY ── */
+  .ai-policy-box {
+    background: #FFFBE6;
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    margin: 1rem 0;
+  }
+  .ai-policy-box h3 { color: #8B7A1E; margin-top: 0; }
+
+  /* ── COLLAPSIBLE POLICY — native details/summary ── */
+  details.policy-details {
+    border-bottom: 1px solid var(--border-light);
+    overflow: hidden;
+    margin: 0;
+  }
+  details.policy-details:last-of-type { border-bottom: none; }
+  details.policy-details > summary {
+    background: var(--warm-gray);
+    padding: .7rem 1.2rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: .9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background .15s;
+    list-style: none;
+    font-family: inherit;
+    color: var(--text);
+    user-select: none;
+  }
+  details.policy-details > summary::-webkit-details-marker { display: none; }
+  details.policy-details > summary::after {
+    content: '▼';
+    font-size: .6rem;
+    transition: transform .2s;
+    display: inline-block;
+  }
+  details.policy-details[open] > summary::after { transform: rotate(180deg); }
+  details.policy-details > summary:hover { background: var(--accent-light); }
+  details.policy-details .policy-body {
+    padding: 1rem 1.2rem;
+    font-size: .88rem;
+    line-height: 1.7;
+    background: var(--surface);
+  }
+  details.policy-details .policy-body a { word-break: break-all; }
+
+  /* ── SCHEDULE TABLE ── */
+  .schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: .88rem;
+  }
+  .schedule-table th {
+    background: var(--accent);
+    color: white;
+    padding: .6rem .8rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: .8rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  .schedule-table td {
+    padding: .55rem .8rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .schedule-table tr:hover td { background: var(--accent-light); }
+  .schedule-table .stage-cell {
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: #999;
+    font-weight: 600;
+  }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    margin-left: var(--sidebar-w);
+    padding: 2rem 3rem;
+    border-top: 1px solid var(--border);
+    font-size: .78rem;
+    color: #aaa;
+    text-align: center;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-overlay.open { display: block; }
+    .hamburger { display: block; }
+    .main { margin-left: 0; padding: 1.5rem; }
+    .site-footer { margin-left: 0; padding: 1.5rem; }
+    .info-grid { grid-template-columns: 1fr; }
+    .grade-scale { grid-template-columns: repeat(2, 1fr); }
+    .site-header .subtitle { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+  <h1>Urban Planning Research</h1>
+  <span class="subtitle">Analysis, Equity, and Policy</span>
+</header>
+
+<!-- SIDEBAR -->
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+<aside class="sidebar">
+  <nav>
+    <div class="nav-group-label">Overview</div>
+    <a href="#welcome">Home</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#grading">Grading</a>
+    <a href="#ai-policy">AI Policy</a>
+    <a href="#learning-objectives">Learning Objectives</a>
+    <a href="#final-project">Final Project</a>
+    <a href="#policies">Policies &amp; Resources</a>
+    <div class="nav-divider"></div>
+    <div class="nav-group-label">Weekly Content</div>
+    <a href="#week1">Week 1 — Urban Systems</a>
+    <a href="#week2">Week 2 — Equity &amp; Justice</a>
+    <a href="#week3">Week 3 — Land Use &amp; Proposal</a>
+    <a href="#week4">Week 4 — Data in Planning</a>
+    <a href="#week5">Week 5 — EDA &amp; Patterns</a>
+    <a href="#week6">Week 6 — Spatial Analysis</a>
+    <a href="#week7">Week 7 — Interpretation</a>
+    <a href="#week8">Week 8 — Policy Design</a>
+    <a href="#week9">Week 9 — Project Work</a>
+    <a href="#week10">Week 10 — Presentations</a>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- WELCOME -->
+  <section id="welcome">
+    <div class="welcome">
+      <h2>Urban Planning Research: Analysis, Equity, and Policy</h2>
+      <p>This website serves as the syllabus for <strong>PLAN 602</strong>, developed by <strong>Yuxi Tian</strong> as part of the course design.</p>
+      <p>This course, provides a hands-on introduction to data-informed research in urban planning, focusing on the intersection of <strong>transportation</strong>, <strong>land use</strong>, and <strong>equity</strong>.</p>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="label">Prerequisites</div>
+        <div class="value" style="font-size:.82rem; font-weight:400; line-height:1.5;">
+          <strong>Recommended:</strong> PLAN 473, PLAN 600, PLAN 601<br>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="label">Software</div>
+        <div class="value" style="font-size:.82rem; font-weight:400; line-height:1.5;">
+          <strong>Stats:</strong> RStudio, Python, SPSS<br>
+          <strong>GIS:</strong> ArcGIS Pro, QGIS
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="label">Readings</div>
+        <div class="value" style="font-size:.82rem; font-weight:400; line-height:1.5;">
+          <p><strong>Before-class readings:</strong> Complete before class, post and prepare for the three discussion questions on the course website.</p>
+          <p><strong>After-class readings:</strong> Review after class; some weeks include short reflection assignments.</p>    
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="label">Late Policy</div>
+        <div class="value" style="font-size:.82rem; font-weight:400; line-height:1.5;">
+          Late submissions are <strong>NOT accepted</strong> — 25% penalty per day, up to 100%.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEDULE -->
+  <h2 id="schedule">Schedule Overview</h2>
+  <p>The course is structured in four progressive stages leading to the final project:</p>
+  <table class="schedule-table">
+    <thead>
+      <tr><th>Week</th><th>Topic</th><th>Stage</th><th>Due</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><a href="#week1">1</a></td><td>Introduction to Urban Systems &amp; Planning Problems</td><td class="stage-cell">Stage 1 — Theory &amp; Framing</td><td><span class="tag tag-assignment">Assign 1</span></td></tr>
+      <tr><td><a href="#week2">2</a></td><td>Planning Theory: Equity, Accessibility, and Justice</td><td class="stage-cell">Stage 1</td><td><span class="tag tag-discussion">Discussion</span></td></tr>
+      <tr><td><a href="#week3">3</a></td><td>Land Use and Travel Behavior &amp; Project Proposal</td><td class="stage-cell">Stage 1 → 2 - Urban Systems Understanding</td><td><span class="tag tag-project">Proposal</span></td></tr>
+      <tr><td><a href="#week4">4</a></td><td>Data in Urban Planning</td><td class="stage-cell">Stage 2 → 3 - Data &amp; Methods</td><td><span class="tag tag-discussion">Discussion</span> <span class="tag tag-assignment">Assign 2</span></td></tr>
+      <tr><td><a href="#week5">5</a></td><td>Exploratory Data Analysis &amp; Interpreting Patterns</td><td class="stage-cell">Stage 3</td><td><span class="tag tag-lab">Lab</span> <span class="tag tag-assignment">Assign 3</span></td></tr>
+      <tr><td><a href="#week6">6</a></td><td>Spatial Analysis and Mapping for Planning</td><td class="stage-cell">Stage 3 → 4 Interpretation, Equity &amp; Policy </td><td><span class="tag tag-lab">Lab</span> <span class="tag tag-assignment">Assign 4</span></td></tr>
+      <tr><td><a href="#week7">7</a></td><td>From Analysis to Planning Interpretation</td><td class="stage-cell">Stage 4</td><td><span class="tag tag-assignment">Assign 5</span></td></tr>
+      <tr><td><a href="#week8">8</a></td><td>Planning Interventions and Policy Design</td><td class="stage-cell">Stage 4</td><td><span class="tag tag-assignment">Assign 6</span></td></tr>
+      <tr><td><a href="#week9">9</a></td><td>Work on Final Project (Office Hours)</td><td class="stage-cell"></td><td></td></tr>
+      <tr><td><a href="#week10">10</a></td><td>Project Presentations</td><td class="stage-cell"></td><td><span class="tag tag-project">Final</span></td></tr>
+    </tbody>
+  </table>
+
+  <!-- GRADING -->
+  <h2 id="grading">Grading</h2>
+  <div class="grade-bar">
+    <div style="width:10%;background:#5B8DB8;" title="Attendance 10%">Attend 10%</div>
+    <div style="width:10%;background:#9B7DC4;" title="Discussion Posts 10%">Posts 10%</div>
+    <div style="width:10%;background:#7B6DAA;" title="Discussion Participation 10%">Particip 10%</div>
+    <div style="width:30%;background:#E8A84C;" title="Assignments 30% (5pts x 6)">Assignments 30%</div>
+    <!-- Final Project split -->
+  <div style="width:10%;background:#4C7A5A;">Proposal 10%</div>
+  <div style="width:10%;background:#3E6A4E;">Presentation 10%</div>
+  <div style="width:20%;background:#2D5A3D;">Report 20%</div>
+</div>
+
+
+  <h3>Grade Scale</h3>
+  <div class="grade-scale">
+    <div><span>A+</span><span class="pts">97–100</span></div>
+    <div><span>A</span><span class="pts">94–96.9</span></div>
+    <div><span>A-</span><span class="pts">90–93.9</span></div>
+    <div><span>B+</span><span class="pts">87–89.9</span></div>
+    <div><span>B</span><span class="pts">84–86.9</span></div>
+    <div><span>B-</span><span class="pts">80–83.9</span></div>
+    <div><span>C+</span><span class="pts">77–79.9</span></div>
+    <div><span>C</span><span class="pts">74–76.9</span></div>
+    <div><span>C-</span><span class="pts">70–73.9</span></div>
+    <div><span>D+</span><span class="pts">67–69.9</span></div>
+    <div><span>D</span><span class="pts">64–66.9</span></div>
+    <div><span>D-</span><span class="pts">60–63.9</span></div>
+  </div>
+  <p style="font-size:.85rem; color:var(--text-secondary);">Below 60 points = F. Late submissions penalized 25% per day (max 100%).</p>
+
+  <!-- LEARNING OBJECTIVES -->
+<h2 id="learning-objectives">Learning Objectives</h2>
+<p>Upon completion of the course, students will be able to:</p>
+
+<div style="margin:.8rem 0; columns:2; column-gap:1.5rem; font-size:.9rem; line-height:1.8;">
+  <p style="margin:0 0 .4rem; break-inside:avoid;">✦ Formulate research questions in urban planning</p>
+  <p style="margin:0 0 .4rem; break-inside:avoid;">✦ Apply planning concepts to analyze urban issues</p>
+  <p style="margin:0 0 .4rem; break-inside:avoid;">✦ Identify and use appropriate data for analysis</p>
+  <p style="margin:0 0 .4rem; break-inside:avoid;">✦ Apply analytical and GIS-based methods</p>
+  <p style="margin:0 0 .4rem; break-inside:avoid;">✦ Interpret findings in relation to planning theory and equity</p>
+  <p style="margin:0 0 .4rem; break-inside:avoid;">✦ Assess patterns across populations and geographic areas</p>
+  <p style="margin:0 0 .4rem; break-inside:avoid;">✦ Translate findings into planning and policy recommendations</p>
+  <p style="margin:0 0 .4rem; break-inside:avoid;">✦ Communicate research clearly in written and oral formats</p>
+</div>
+
+  <!-- AI POLICY -->
+  <h2 id="ai-policy">AI Usage Policy</h2>
+  <div class="ai-policy-box">
+    <h3>⚠ Important</h3>
+    <p>The use of AI tools for completing assignments is <strong>NOT permitted</strong>. However, limited use of AI is allowed for <strong>idea exploration</strong>, such as developing research topics or identifying relevant datasets for the final project.</p>
+    <p style="margin-top:.5rem;">When using AI for these purposes, students must document:</p>
+    <p style="margin-left:1rem;">
+      • The prompts used<br>
+      • The outputs generated<br>
+      • How they evaluated and incorporated these outputs
+    </p>
+    <p style="margin-top:.5rem;">The final submission must clearly reflect the student's own reasoning and development of ideas.</p>
+  </div>
+
+  <!-- FINAL PROJECT -->
+  <h2 id="final-project">Final Project</h2>
+  <p>The final project is the core component of this course. Students will design and conduct an independent research project that examines an urban planning issue through the integration of planning theory, empirical data analysis, and policy-oriented interpretation.</p>
+
+ <h3>Project Objectives</h3>
+
+<div style="margin:.6rem 0; columns:2; column-gap:1.5rem; font-size:.9rem; line-height:1.8;">
+  <p style="margin:0 0 .4rem; break-inside:avoid;">✦ Formulate a clear research question</p>
+  <p style="margin:0 0 .4rem; break-inside:avoid;">✦ Apply planning concepts or theoretical frameworks</p>
+  <p style="margin:0 0 .4rem; break-inside:avoid;">✦ Identify and access relevant data</p>
+  <p style="margin:0 0 .4rem; break-inside:avoid;">✦ Conduct spatial and non-spatial analysis</p>
+  <p style="margin:0 0 .4rem; break-inside:avoid;">✦ Interpret findings in relation to planning theory and urban systems</p>
+  <p style="margin:0 0 .4rem; break-inside:avoid;">✦ Develop actionable planning and policy recommendations</p>
+</div>
+
+  <h3>Required Components</h3>
+  <p>The final project must include the following six components:</p>
+  <div style="margin:.5rem 0 1rem 0; font-size:.9rem; line-height:1.8;">
+    <p><strong>1. Research Question and Context</strong><br>
+    <span style="color:var(--text-secondary);">✦ Clearly define a planning problem or question <br>✦ Explain how the theoretical perspective informs the research</span></p>
+    <p><strong>2. Theoretical Framework &amp; Literature Review</strong><br>
+    <span style="color:var(--text-secondary);">✦ Review relevant academic literature <br>✦ Identify key themes, findings, and gaps <br>✦ Use planning concepts (e.g., equity, accessibility) to frame the research problem</span></p>
+    <p><strong>3. Data &amp; Methods</strong><br>
+    <span style="color:var(--text-secondary);">✦ Describe data sources and analytical approach (descriptive, comparative, spatial, etc.)</span></p>
+    <p><strong>4. Analysis &amp; Results</strong><br>
+    <span style="color:var(--text-secondary);">✦ Present findings through figures, maps, tables, etc</span></p>
+    <p><strong>5. Interpretation</strong><br>
+    <span style="color:var(--text-secondary);">✦ Explain patterns and underlying causes<br>✦ Connect findings to planning theory</span></p>
+    <p><strong>6. Planning &amp; Policy Implications and Recommendations</strong><br>
+    <span style="color:var(--text-secondary);">✦ Propose interventions or policy strategies<br>✦ Consider equity and feasibility</span></p>
+  </div>
+
+  <p style="font-size:.85rem; color:var(--text-secondary);">Helpful resources: <a href="https://manoa.hawaii.edu/ssc/academic-assistance/writing-center/">UH Writing Center</a> · <a href="http://www.lib.ncsu.edu/citationbuilder/">Citation Builder (APA/MLA)</a></p>
+
+  <!-- WEEKLY CONTENT -->
+  <h2 id="weekly-content">Weekly Content</h2>
+
+  <!-- WEEK 1 -->
+  <div class="week-section" id="week1">
+    <div class="week-stage">Stage 1 — Planning Theory &amp; Problem Framing</div>
+    <div class="week-title">Week 1</div>
+    <div class="week-subtitle">Introduction to Urban Systems &amp; Planning Problems</div>
+
+    <details class="topics-details"><summary>
+      Covered Topics</summary>
+    <div class="topics-content">
+      <ul>
+        <li>Course Overview &amp; Final Project Introduction
+          <ul>
+            <li>Overview of course structure and expectations</li>
+            <li>Introduction to the final project and how it develops throughout the semester</li>
+          </ul>
+        </li>
+        <li>What is a Planning Problem?
+          <ul><li>Distinction between technical issues and planning problems</li></ul>
+        </li>
+        <li>Urban Systems Overview
+          <ul>
+            <li>Transportation systems</li>
+            <li>Land use</li>
+            <li>Built environment</li>
+          </ul>
+        </li>
+        <li>Introduction to Equity in Planning
+          <ul>
+            <li>Basic concept of equity in planning</li>
+            <li>Why transportation and land use matter for equity</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    </details>
+
+    <div class="block">
+      <div class="block-label"><span class="tag tag-reading">Readings</span> After Class</div>
+      <ul>
+        <li>Ewing, R., &amp; Cervero, R. (2010). Travel and the Built Environment: A Meta-Analysis. <em>JAPA, 76</em>(3), 265–294. <a href="https://doi.org/10.1080/01944361003766766">DOI</a></li>
+        <li>Healey, P. (2006). <em>Collaborative Planning</em> (Chapter 1). <a href="http://archive.org/details/collaborativepla0000heal_g4d0">Link</a></li>
+        <li>Martens, K. (2016). <em>Transport Justice</em> (Introduction). <a href="https://doi.org/10.4324/9781315746852">DOI</a></li>
+      </ul>
+    </div>
+
+    <div class="assignment-box">
+      <strong><span class="tag tag-assignment">Assignment 1</span></strong><br>
+      Based on readings, write a short reflection (1–2 pages): <br>✦ How do transport and land use planning shape mobility and accessibility? <br>✦ How should those outcomes be judged in terms of equity?
+    </div>
+  </div>
+
+  <!-- WEEK 2 -->
+  <div class="week-section" id="week2">
+    <div class="week-stage">Stage 1 — Planning Theory &amp; Problem Framing</div>
+    <div class="week-title">Week 2</div>
+    <div class="week-subtitle">Planning Theory: Equity, Accessibility, and Justice</div>
+
+    <details class="topics-details"><summary>
+      Covered Topics</summary>
+    <div class="topics-content">
+      <ul>
+        <li>Recap: What is the planning problem?</li>
+        <li>How to evaluate whether a planning outcome is "fair"?</li>
+        <li>(Class Discussion) Equity &amp; Justice in Planning
+          <ul>
+            <li>Distributive justice (Rawls)</li>
+            <li>Procedural justice (Sen)</li>
+          </ul>
+        </li>
+        <li>Accessibility vs. Mobility
+          <ul>
+            <li>Key distinctions and their role in planning analysis</li>
+            <li>Why accessibility is central to equity</li>
+          </ul>
+        </li>
+        <li>Applying Theory to Planning Problems
+          <ul>
+            <li>Using concepts to frame research questions</li>
+            <li>Examples of theory-informed planning questions</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    </details>
+
+    <div class="before-class-box">
+      <strong><span class="tag tag-before">Before Class</span> Required Reading</strong><br>
+      <ul style="list-style:none; padding:0; margin-top:.3rem;">
+        <li style="padding:.15rem 0;">• Rawls, J. (1985). <em>A Theory of Justice: Revised Edition</em> (Chapters I–III).</li>
+        <li style="padding:.15rem 0;">• Sen, A. (2009). <em>The Idea of Justice</em> (Introduction, Chapters 1–6). Belknap Press.</li>
+      </ul>
+    </div>
+
+    <div class="discussion-box">
+      <strong><span class="tag tag-discussion">Discussion</span></strong> Post 3 discussion questions based on the before-class readings to the class website. Selected students will lead the 45-min discussion in class (bonus points for selected questions).
+    </div>
+
+    <div class="block">
+      <div class="block-label"><span class="tag tag-reading">Readings</span> After Class</div>
+      <ul>
+        <li>Fainstein, S. S. (2010). <em>The Just City</em> (Chapter 1).</li>
+        <li>Martens, K. (2012). Justice in transport as justice in accessibility. <em>Transportation, 39</em>(6), 1035–1053. <a href="https://doi.org/10.1007/s11116-012-9388-7">DOI</a></li>
+        <li>Wennink, A., &amp; Krapp, A. (2020). <em>Equity-Oriented Performance Measures in Transportation Planning</em>.</li>
+        <li>Pereira, R. H. M., Schwanen, T., &amp; Banister, D. (2017). Distributive justice and equity in transportation. <em>Transport Reviews, 37</em>(2), 170–191. <a href="https://doi.org/10.1080/01441647.2016.1257660">DOI</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 3 -->
+  <div class="week-section" id="week3">
+    <div class="week-stage">Stage 1 → 2 — Urban Systems Understanding</div>
+    <div class="week-title">Week 3</div>
+    <div class="week-subtitle">Land Use and Travel Behavior &amp; Project Proposal</div>
+
+    <details class="topics-details"><summary>
+      Covered Topics</summary>
+    <div class="topics-content">
+      <ul>
+        <li>Recap Week 2: Equity and Accessibility
+          <ul><li>How do these concepts actually show up in cities?</li></ul>
+        </li>
+        <li>Land Use &amp; Travel Behavior
+          <ul>
+            <li>Relationship between the built environment and travel behavior</li>
+            <li>5Ds Framework from Ewing &amp; Cervero (2010)</li>
+          </ul>
+        </li>
+        <li>Linking to Accessibility &amp; Equity
+          <ul>
+            <li>How land use shapes access to opportunities</li>
+            <li>Implications for different populations</li>
+          </ul>
+        </li>
+        <li>What Makes a Good Proposal?
+          <ul>
+            <li>Key components of a research proposal</li>
+            <li>Examples of clear vs. unclear research questions</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    </details>
+
+    <div class="block">
+      <div class="block-label"><span class="tag tag-reading">Readings</span> After Class</div>
+      <ul>
+        <li>(Revisit) Ewing &amp; Cervero (2010). Travel and the Built Environment. <a href="https://doi.org/10.1080/01944361003766766">DOI</a></li>
+        <li><em>Urban Land Use Planning</em> Ch 8: Transportation and Infrastructure Systems.</li>
+        <li>Chapple (2015). <em>The Challenge of Mixing Uses and the Secret Sauce of Urban Industrial Land</em>.</li>
+      </ul>
+    </div>
+
+    <div class="assignment-box">
+      <strong><span class="tag tag-project">Project Proposal</span></strong><br>
+      Write a 2–3 page proposal including: Background, Research Question, Data Plan, Proposed Method, and Expected Outcomes.
+    </div>
+  </div>
+
+  <!-- WEEK 4 -->
+  <div class="week-section" id="week4">
+    <div class="week-stage">Stage 2 → 3 — Data &amp; Methods</div>
+    <div class="week-title">Week 4</div>
+    <div class="week-subtitle">Data in Urban Planning</div>
+
+    <details class="topics-details"><summary>
+      Covered Topics</summary>
+    <div class="topics-content">
+      <ul>
+        <li>(Class Discussion) Why include data in Planning?
+          <ul>
+            <li>How urban systems can be measured using data</li>
+            <li>How data supports the investigation of planning questions</li>
+          </ul>
+        </li>
+        <li>Types of Urban Data
+          <ul>
+            <li>Demographic data (e.g., census)</li>
+            <li>Transportation data (e.g., GTFS, ridership)</li>
+            <li>Built environment data (e.g., points of interest)</li>
+            <li>Land use and zoning data</li>
+          </ul>
+        </li>
+        <li>Data Limitations &amp; Planning Judgment
+          <ul>
+            <li>Missing data</li>
+            <li>Bias and representation</li>
+            <li>Scale and spatial units</li>
+          </ul>
+        </li>
+        <li>Introduction to EDA
+          <ul>
+            <li>Descriptive analysis and data visualization</li>
+            <li>Identifying basic patterns and differences</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    </details>
+
+    <div class="before-class-box">
+      <strong><span class="tag tag-before">Before Class</span> Required Reading</strong><br>
+      <ul style="list-style:none; padding:0; margin-top:.3rem;">
+        <li style="padding:.15rem 0;">• Goodspeed, R. (2015). Smart cities: Moving beyond urban cybernetics. <em>Cambridge J Regions</em>. <a href="https://doi.org/10.1093/cjres/rsu013">DOI</a></li>
+        <li style="padding:.15rem 0;">• Wu, J., &amp; Zhou, J. (2023). Revealing social dimensions of urban mobility with big data. <em>JTLU</em>. <a href="https://doi.org/10.5198/jtlu.2023.2281">DOI</a></li>
+      </ul>
+    </div>
+
+    <div class="discussion-box">
+      <strong><span class="tag tag-discussion">Discussion</span></strong> Post 3 discussion questions based on the before-class readings. Selected students lead the in-class discussion (bonus points).
+    </div>
+
+    <div class="block">
+      <div class="block-label"><span class="tag tag-reading">Readings</span> After Class</div>
+      <ul>
+        <li>Boeing, G. (2020). Urban Street Network Analysis in a Computational Notebook. <em>REGION, 7</em>(3). <a href="https://doi.org/10.18335/region.v6i3.278">DOI</a></li>
+        <li>Kitchin, R. (2015). <em>Data-Driven, Networked Urbanism</em>. <a href="https://doi.org/10.2139/ssrn.2641802">DOI</a></li>
+        <li>Kontokosta, C. E. (2021). Urban Informatics in the Science and Practice of Planning. <em>JPER, 41</em>(4). <a href="https://doi.org/10.1177/0739456X18793716">DOI</a></li>
+      </ul>
+    </div>
+
+    <div class="assignment-box">
+      <strong><span class="tag tag-assignment">Assignment 2</span></strong><br>
+      Submit 2–3 pages: Explore data sources connected to your planning problem, create 2–3 initial visualizations, describe expected outcomes, and outline next steps.
+    </div>
+  </div>
+
+  <!-- WEEK 5 -->
+  <div class="week-section" id="week5">
+    <div class="week-stage">Stage 3 — Data &amp; Methods</div>
+    <div class="week-title">Week 5</div>
+    <div class="week-subtitle">Exploratory Data Analysis and Interpreting Patterns</div>
+
+    <details class="topics-details"><summary>
+      Covered Topics</summary>
+    <div class="topics-content">
+      <ul>
+        <li>Bridge: From data exploration to analysis
+          <ul><li>Moving from observing patterns to structured analysis</li></ul>
+        </li>
+        <li>Analytical Methods in Planning
+          <ul>
+            <li>Descriptive analysis</li>
+            <li>Group comparison</li>
+            <li>Cross-variable analysis</li>
+          </ul>
+        </li>
+        <li>Understanding Relationships in Data
+          <ul>
+            <li>Identify patterns and differences</li>
+            <li>Interpreting relationships between variables</li>
+          </ul>
+        </li>
+        <li>From Patterns to Interpretation
+          <ul>
+            <li>Distinguishing patterns from explanations</li>
+            <li>Connecting results to planning questions</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    </details>
+
+    <div class="lab-box">
+      <strong><span class="tag tag-lab">Lab</span> Software Tutorial</strong><br>
+      Guided practice with analytical methods: descriptive analysis, group comparison, cross-variable analysis, and basic interpretation. <strong>Complete the lab tutorial first</strong>, then proceed to the assignment.
+    </div>
+
+    <div class="block">
+      <div class="block-label"><span class="tag tag-reading">Readings</span> After Class</div>
+      <ul>
+        <li>Andrienko, N., &amp; Andrienko, G. (2005). <em>Exploratory Analysis of Spatial and Temporal Data</em>.</li>
+        <li>Freire, J. et al. (2016). Exploring What not to Clean in Urban Data. <em>IEEE Data Eng. Bull.</em></li>
+      </ul>
+    </div>
+
+    <div class="assignment-box">
+      <strong><span class="tag tag-assignment">Assignment 3</span></strong><br>
+      Submit 2–3 pages: Analytical methods applied to your project dataset, results and visualizations, interpretation related to planning issues, and next steps.
+    </div>
+  </div>
+
+  <!-- WEEK 6 -->
+  <div class="week-section" id="week6">
+    <div class="week-stage">Stage 3 → 4 — Interpretation, Equity &amp; Policy</div>
+    <div class="week-title">Week 6</div>
+    <div class="week-subtitle">Spatial Analysis and Mapping for Planning</div>
+
+    <details class="topics-details"><summary>
+      Covered Topics</summary>
+    <div class="topics-content">
+      <ul>
+        <li>Bridge: Why Space Matters in Planning?</li>
+        <li>Introduction to Spatial Thinking
+          <ul>
+            <li>Spatial distribution and clustering</li>
+            <li>Geographic patterns and inequality</li>
+          </ul>
+        </li>
+        <li>Mapping as an Analytical Tool
+          <ul><li>Maps as a tool for analysis</li></ul>
+        </li>
+        <li>Spatial Analysis for Equity
+          <ul>
+            <li>Identifying underserved areas</li>
+            <li>Linking spatial patterns to accessibility and inequality</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    </details>
+
+    <div class="lab-box">
+      <strong><span class="tag tag-lab">Lab</span> GIS Tutorial</strong><br>
+      Guided GIS tutorial: create maps, analyze spatial patterns, and evaluate accessibility and inequality. <strong>Complete the lab tutorial first</strong>, then proceed to the assignment.
+    </div>
+
+    <div class="block">
+      <div class="block-label"><span class="tag tag-reading">Readings</span> After Class</div>
+      <ul>
+        <li>Anselin, L. et al. (2006). GeoDa: An Introduction to Spatial Data Analysis. <em>Geographical Analysis, 38</em>(1). <a href="https://doi.org/10.1111/j.0016-7363.2005.00671.x">DOI</a></li>
+        <li>Golub, A. et al. (2013). Making accessibility analyses accessible. <em>JTLU, 6</em>(3). <a href="https://doi.org/10.5198/jtlu.v6i3.352">DOI</a></li>
+        <li>Talen, E. (1998). Visualizing Fairness: Equity Maps for Planners. <em>JAPA, 64</em>(1). <a href="https://doi.org/10.1080/01944369808975954">DOI</a></li>
+      </ul>
+    </div>
+
+    <div class="assignment-box">
+      <strong><span class="tag tag-assignment">Assignment 4</span></strong><br>
+      Submit 2–3 pages: Spatial methods applied, at least 1–2 maps, spatial patterns, equity and accessibility interpretation, and next steps.
+    </div>
+  </div>
+
+  <!-- WEEK 7 -->
+  <div class="week-section" id="week7">
+    <div class="week-stage">Stage 4 — Interpretation, Equity &amp; Policy</div>
+    <div class="week-title">Week 7</div>
+    <div class="week-subtitle">From Analysis to Planning Interpretation</div>
+
+    <details class="topics-details"><summary>
+      Covered Topics</summary>
+    <div class="topics-content">
+      <ul>
+        <li>Bridge: From quantitative patterns to interpreting their significance</li>
+        <li>Applying Equity Concepts to Analysis
+          <ul>
+            <li>Using equity and accessibility as interpretive frameworks</li>
+            <li>Distinguishing difference from inequality</li>
+          </ul>
+        </li>
+        <li>From Pattern to Explanation
+          <ul>
+            <li>Identifying possible causes of observed patterns</li>
+            <li>Linking results to urban systems (land use, transportation)</li>
+          </ul>
+        </li>
+        <li>Interpreting Inequality in Planning Context
+          <ul>
+            <li>Who is affected and why</li>
+            <li>Structural vs. individual factors</li>
+          </ul>
+        </li>
+        <li>Linking to Policy and Action
+          <ul>
+            <li>How findings inform planning decisions</li>
+            <li>Preparing for policy recommendations (Week 8)</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    </details>
+
+    <div class="block">
+      <div class="block-label"><span class="tag tag-reading">Readings</span> After Class</div>
+      <ul>
+        <li>Davoudi, S., &amp; Brooks, E. (2014). When Does Unequal become Unfair? <em>Environ. Plan. A, 46</em>(11). <a href="https://doi.org/10.1068/a130346p">DOI</a></li>
+        <li>Martens, K., &amp; Golub, A. (2018). A Fair Distribution of Accessibility. <a href="https://journals.sagepub.com/doi/10.1177/0739456X18791014">Link</a></li>
+        <li>Martens, K. et al. (2022). Equity in Accessibility: From Disparity to Insufficiency. <em>JAPA, 88</em>(4). <a href="https://doi.org/10.1080/01944363.2021.2016476">DOI</a></li>
+      </ul>
+    </div>
+
+    <div class="assignment-box">
+      <strong><span class="tag tag-assignment">Assignment 5</span></strong><br>
+      Submit 1–2 pages: Summary of key findings, equity analysis, interpretation, planning implications, and limitations.
+    </div>
+  </div>
+
+  <!-- WEEK 8 -->
+  <div class="week-section" id="week8">
+    <div class="week-stage">Stage 4 — Interpretation, Equity &amp; Policy</div>
+    <div class="week-title">Week 8</div>
+    <div class="week-subtitle">Planning Interventions and Policy Design</div>
+
+    <details class="topics-details"><summary>
+      Covered Topics</summary>
+    <div class="topics-content">
+      <ul>
+        <li>Bridge: From Interpretation to Action
+          <ul><li>Why planning requires intervention, not just analysis</li></ul>
+        </li>
+        <li>Types of Planning Interventions
+          <ul>
+            <li>Land Use Interventions</li>
+            <li>Transportation Interventions</li>
+            <li>Accessibility Interventions</li>
+          </ul>
+        </li>
+        <li>Evaluating Policy Responses (linking back to Week 2 theory)
+          <ul><li>Considering trade-offs and unintended consequences</li></ul>
+        </li>
+        <li>From Findings to Recommendations
+          <ul>
+            <li>Translating results into targeted and feasible actions</li>
+            <li>Characteristics of strong planning recommendations</li>
+          </ul>
+        </li>
+        <li>Linking Back to Project
+          <ul><li>Preparing for final project integration</li></ul>
+        </li>
+      </ul>
+    </div>
+    </details>
+
+    <div class="block">
+      <div class="block-label"><span class="tag tag-reading">Readings</span> After Class</div>
+      <ul>
+        <li>Bardach, E. (2019). <em>A Practical Guide for Policy Analysis: The Eightfold Path</em>.</li>
+        <li>Litman, T. (2015). <em>Evaluating Transportation Equity</em>.</li>
+        <li>Stead, D. (2021). Conceptualizing the Policy Tools of Spatial Planning. <em>J Plan Lit, 36</em>(3). <a href="https://doi.org/10.1177/0885412221992283">DOI</a></li>
+      </ul>
+    </div>
+
+    <div class="assignment-box">
+      <strong><span class="tag tag-assignment">Assignment 6</span></strong><br>
+      Submit 1–2 pages: Key findings, proposed interventions, justification, equity considerations, and feasibility.
+    </div>
+  </div>
+
+  <!-- WEEK 9 -->
+  <div class="week-section" id="week9">
+    <div class="week-title">Week 9</div>
+    <div class="week-subtitle">Work on Final Project</div>
+    <p style="font-size:.9rem; color:var(--text-secondary);">In-person office hours during class time. Use this week to finalize your analysis, interpretations, and policy recommendations.</p>
+  </div>
+
+  <!-- WEEK 10 -->
+  <div class="week-section" id="week10">
+    <div class="week-title">Week 10</div>
+    <div class="week-subtitle">Project Presentations</div>
+    <p style="font-size:.9rem; color:var(--text-secondary);">Each student will present their research findings, analysis, and policy recommendations. See the Final Report &amp; Presentation Rubric under <a href="#policies">Policies &amp; Resources</a> for evaluation criteria.</p>
+  </div>
+
+  <!-- POLICIES -->
+  <h2 id="policies">Policies &amp; Resources</h2>
+  <p style="margin-bottom:1rem; color:var(--text-secondary); font-size:.9rem;">Expand each section to read the full policy details.</p>
+
+  <details class="policy-details">
+    <summary>
+      Attendance &amp; Participation</summary>
+    <div class="policy-body">
+      <p>This is an in-person class, and students are expected to attend all classes and complete all activities and labs. No cellphones, texting and social media are allowed. If you expect to miss a class for legitimate reasons, please notify the instructor via email in advance. Excessive absences or disruptive behavior will justify a lower or failing grade (more than 3 unexcused absences). Active listening and constructive contribution are also expected.</p>
+    </div>
+  </details>
+
+  <details class="policy-details">
+    <summary>Final Report &amp; Presentation Rubric</summary>
+    <div class="policy-body">
+      <p><strong>Report (100 pts):</strong> <br>✦ Research Question Framing (10 pts)<br>✦  Literature Review &amp; Theoretical Framework (15 pts)<br>✦ Data &amp; Methods (15 pts)<br>✦ Analysis (20 pts)<br>✦ Interpretation &amp; Equity Analysis (20 pts)<br>✦ Planning Recommendations (20 pts)</p>
+      <p style="margin-top:.6rem;"><strong>Presentation (50 pts):</strong> <br>✦Research Question &amp; Context (5 pts) <br>✦ Methods &amp; Analysis (10 pts) <br>✦ Key Findings (10 pts) <br>✦ Interpretation &amp; Planning Insight (10 pts) <br>✦ Policy Recommendations (10 pts) <br>✦ Presentation Quality (5 pts)</p>
+      <p style="margin-top:.6rem; font-size:.82rem; color:var(--text-secondary);">Each component is graded on a 4-tier rubric: Excellent, Good, Satisfactory, Needs Improvement.</p>
+    </div>
+  </details>
+
+  <details class="policy-details">
+    <summary>
+      Useful Resources &amp; Software</summary>
+    <div class="policy-body">
+      <p><strong>Statistics Software:</strong> <a href="https://www.ibm.com/products/spss">SPSS</a> · <a href="https://rstudio-desktop.en.softonic.com/">RStudio</a> · <a href="https://www.datacamp.com/tutorial/r-studio-tutorial">R Tutorial (DataCamp)</a></p>
+      <p style="margin-top:.5rem;"><strong>GIS Resources:</strong></p>
+      <p>
+        <a href="http://www.ncgia.ucsb.edu/">NCGIA</a> ·
+        <a href="http://gis.hicentral.com">HoLIS (Honolulu)</a> ·
+        <a href="http://cchnl.maps.arcgis.com/home/">Honolulu Open Geospatial Data</a> ·
+        <a href="http://hawaii.gov/dbedt/gis/">Hawai'i State GIS</a> ·
+        <a href="https://tigerweb.geo.census.gov/tigerwebmain/TIGERweb_main.html">Census TIGER</a> ·
+        <a href="https://store.usgs.gov/">USGS</a> ·
+        <a href="https://guides.library.manoa.hawaii.edu/magis">UH Mānoa Library GIS</a> ·
+        <a href="https://community.esri.com/">Esri Community</a> ·
+        <a href="https://support.esri.com/en/other-resources/gis-dictionary">ESRI GIS Dictionary</a>
+      </p>
+    </div>
+  </details>
+
+  <details class="policy-details">
+    <summary>
+      Disability Services (KOKUA Program)</summary>
+    <div class="policy-body">
+      <p>If you have a disability and related access needs, please contact the KOKUA Program (Office for Students with Disabilities) at 956-7511, <a href="mailto:KOKUA@hawaii.edu">KOKUA@hawaii.edu</a>, or Room 013 in the Queen Lili'uokalani Center for Student Services. The instructor will work with you and KOKUA to meet your access needs. Services are confidential and offered free of charge.</p>
+    </div>
+  </details>
+
+  <details class="policy-details">
+    <summary>
+      Academic Integrity</summary>
+    <div class="policy-body">
+      <p>Cheating, plagiarism, or other forms of academic dishonesty are not permitted and are prohibited under the System-wide Student Conduct Code (EP 7.208). Examples include fabrication, falsification, cheating, plagiarism, and use of improper materials. Any incident will be reported to the Office of Student Conduct. The instructor may also take action regarding the grade for the deliverable or course.</p>
+    </div>
+  </details>
+
+  <details class="policy-details">
+    <summary>
+      Title IX &amp; Campus Safety</summary>
+    <div class="policy-body">
+      <p><strong>Office of Title IX:</strong> (808) 956-2299 · <a href="mailto:t9uhm@hawaii.edu">t9uhm@hawaii.edu</a> · <a href="https://manoa.hawaii.edu/titleix/">Website</a></p>
+      <p><strong>Department of Public Safety:</strong> (808) 956-6911 (Emergency) · (808) 956-8211 (Non-Emergency) · <a href="http://manoa.hawaii.edu/dps/">Website</a></p>
+    </div>
+  </details>
+
+  <details class="policy-details">
+    <summary>
+      Basic Needs &amp; Student Success Resources</summary>
+    <div class="policy-body">
+      <p><strong>UH System Basic Needs</strong> include food, housing, childcare, mental health, financial resources and transportation. If you or someone you know are experiencing basic needs insecurity, see: <a href="https://www.hawaii.edu/student-basic-needs/resources/manoa/">UH Basic Needs Resources</a></p>
+      <p style="margin-top:.5rem;"><strong>Student Success:</strong> The Office of the Vice Provost for Student Success provides learning assistance, academic advising, career resources, counseling, and more. (808) 956-3290 · <a href="https://manoa.hawaii.edu/studentsuccess/departments/">Website</a></p>
+    </div>
+  </details>
+
+  <details class="policy-details">
+    <summary>
+      Syllabus Disclaimer</summary>
+    <div class="policy-body">
+      <p>This syllabus is a representation of the current objectives of the course, which are subject to change to enhance class learning opportunities. Any changes will be communicated clearly. It is the student's responsibility to confirm the most recent version is being used.</p>
+    </div>
+  </details>
+
+</main>
+
+<footer class="site-footer">
+  Urban Planning Research: Analysis, Equity, and Policy · University of Hawai'i at Mānoa
+</footer>
+
+<script>
+  // Toggle sidebar on mobile
+  function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('open');
+    document.querySelector('.sidebar-overlay').classList.toggle('open');
+  }
+
+  // Close sidebar when a link is clicked (mobile)
+  document.querySelectorAll('.sidebar nav a').forEach(a => {
+    a.addEventListener('click', () => {
+      if (window.innerWidth <= 900) {
+        document.querySelector('.sidebar').classList.remove('open');
+        document.querySelector('.sidebar-overlay').classList.remove('open');
+      }
+    });
+  });
+
+
+
+  // Active sidebar link on scroll
+  const sections = document.querySelectorAll('[id]');
+  const navLinks = document.querySelectorAll('.sidebar nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.remove('active');
+      if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
